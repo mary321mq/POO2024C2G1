@@ -49,9 +49,11 @@ public class CalcControl {
 
     @FXML
     public void initialize() {
+        listaOper();
         anular();
     }
- int t=0;
+
+    int t=0;
 
     @FXML
     public void accionButton(ActionEvent event){
