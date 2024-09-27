@@ -22,13 +22,29 @@ public class CalculadoraDao {
         conn= con.getConn();
     }
 
+    public int idGenerate(){
+        int idx=0;
+        try {
+            ps=conn.prepareStatement("SELECT (MAX(id)+1) as idx FROM calculadora;");
+            rs=ps.executeQuery();
+            if(rs.next()){
+                idx=rs.getInt("idx");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return idx;
+    }
+
     public List<CalcTO> listar(){
+
         List<CalcTO> listC = new ArrayList<>();
         try {
             ps=conn.prepareStatement("SELECT * from calculadora;");
             rs=ps.executeQuery();
             while(rs.next()){
                 CalcTO calcTO = new CalcTO();
+                calcTO.setId(rs.getInt("id"));
                 calcTO.setNum1(rs.getString("num1"));
                 calcTO.setNum2(rs.getString("num2"));
                 calcTO.setOperador(rs.getString("operador").charAt(0));
@@ -42,15 +58,21 @@ public class CalculadoraDao {
     }
 
     public void insertar(CalcTO calcTO){
+        int idx=idGenerate();
+        System.out.println(idx);
+        int i=0;
+        conn= con.getConn();
         try {
-            ps=conn.prepareStatement("INSERT into calculadora(num1, num2, operador, resultado) values(?, ?, ?, ?); ");
-            ps.setString(1, calcTO.getNum1());
-            ps.setString(2, calcTO.getNum2());
-            ps.setString(3, String.valueOf(calcTO.getOperador()));
-            ps.setString(4, calcTO.getResultado());
+            ps=conn.prepareStatement("INSERT into calculadora(id, num1, num2, operador, resultado) values(?,?, ?, ?, ?);  ");
+            ps.setInt(++i, idx);
+            ps.setString(++i, calcTO.getNum1());
+            ps.setString(++i, calcTO.getNum2());
+            ps.setString(++i, String.valueOf(calcTO.getOperador()));
+            ps.setString(++i, calcTO.getResultado());
             ps.executeUpdate();
+           // System.out.println(idx+" n1:"+calcTO.getNum1()+" n2:"+calcTO.getNum2()+" op:"+calcTO.getOperador()+ calcTO.getResultado());
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("EIN:"+e.getMessage());
         }
     }
 

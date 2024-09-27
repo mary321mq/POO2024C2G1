@@ -111,10 +111,12 @@ public class CalcControl {
         to.setNum1(String.valueOf(val1));
         to.setNum2(String.valueOf(val2));
         to.setOperador(valores[1].charAt(0));
+
         to.setResultado(String.valueOf(txtResultado.getText()));
         if(indexEdit!=-1){
             serviceI.actualizarResultados(to, indexEdit);
         }else{
+            System.out.println("VV:"+txtResultado.getText());
             serviceI.guardarResultados(to);
         }
         indexEdit=-1;
