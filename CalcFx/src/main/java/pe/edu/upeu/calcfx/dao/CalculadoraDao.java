@@ -7,6 +7,7 @@ import pe.edu.upeu.calcfx.modelo.CalcTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,5 +77,29 @@ public class CalculadoraDao {
         }
     }
 
+    public void actualizar(CalcTO calcTO, int id){
+        int i=0;
+        try {
+            ps=conn.prepareStatement("UPDATE  calculadora SET num1 =?, num2 =?, operador =?, resultado =? WHERE id =?; ");
+            ps.setString(++i, calcTO.getNum1());
+            ps.setString(++i, calcTO.getNum2());
+            ps.setString(++i, String.valueOf(calcTO.getOperador()));
+            ps.setString(++i, calcTO.getResultado());
+            ps.setInt(++i, id);
+            ps.executeUpdate();
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public void eliminar(int id){
+        try {
+            ps=conn.prepareStatement("DELETE FROM calculadora WHERE id=?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
 }
